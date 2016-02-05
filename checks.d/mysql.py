@@ -364,15 +364,15 @@ class MySql(AgentCheck):
             if defaults_file != '':
                 db = pymysql.connect(read_default_file=defaults_file, ssl=ssl)
             elif mysql_sock != '':
+                self.service_check_tags = [
+                    'server:{0}'.format(mysql_sock),
+                    'port:unix_socket'
+                ]
                 db = pymysql.connect(
                     unix_socket=mysql_sock,
                     user=user,
                     passwd=password
                 )
-                self.service_check_tags = [
-                    'server:{0}'.format(mysql_sock),
-                    'port:unix_socket'
-                ]
             elif port:
                 db = pymysql.connect(
                     host=host,
